@@ -1,5 +1,6 @@
 const https = require('https');
 const fs = require('fs');
+const sharp = require("sharp");
 
 // TODO: proper logging
 // TODO: add function docs
@@ -67,8 +68,18 @@ function saveToFile(contents, filename) {
 }
 
 // main
-getPage("Tools_we_have", (body, err) => {
-  if (err) throw err;
-  saveToFile(JSON.stringify(body), "all_tools.wikitext");
-});
+// getPage("6", (body, err) => {
+  // if (err) throw err;
+  // console.log(body);
+// });
 
+// convert SVG to PNG
+sharp("./templates/wikipage-2x1.svg")
+  .png()
+  .toFile("new-file.png")
+  .then(info => {
+    console.log(info);
+  })
+  .catch(err => {
+    console.log(err);
+  });
