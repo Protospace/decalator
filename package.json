@@ -9,6 +9,7 @@
   "author": "brockman.ks@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "sharp": "^0.29.3"
+    "sharp": "^0.29.3",
+    "qrcode": "^1.5.0"
   }
 }

@@ -73,8 +73,12 @@ function saveToFile(contents, filename) {
   // console.log(body);
 // });
 
+// open SVG as XML document
+// modify text as per tags...
+// generate QR code
+
 // convert SVG to PNG
-sharp("./templates/wikipage-2x1.svg")
+sharp("./templates/wikijump-2x1.svg")
   .png()
   .toFile("new-file.png")
   .then(info => {
