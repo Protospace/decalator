@@ -1,6 +1,9 @@
 const https = require('https');
 const fs = require('fs');
 
+// TODO: proper logging
+// TODO: add function docs
+
 function getPage(name, callback) {
   const API = "https://wiki.protospace.ca/api.php";
   // TODO: string builder? what is risk of injection attack?
@@ -14,11 +17,18 @@ function getPage(name, callback) {
     });
 
     res.on("end", (err) => {
+      if (err) {
+        callback(null, err);
+        return
+      }
+
+      // TODO: error handling https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse#exceptions
+      resp = JSON.parse(body).parse;
+      // TODO: error handling if property doesn't exist
+      wikitext = resp.wikitext["*"];
+
       // check if this page has a redirect
       // protospace wiki pages for tools often do
-      // TODO: exception handling
-      resp = JSON.parse(body).parse;
-      wikitext = resp.wikitext["*"];
       if (isRedirect(wikitext)) {
         redirect_page = extractRedirect(wikitext)
         console.log("CALL REDIRECT", redirect_page);
@@ -49,9 +59,16 @@ function extractRedirect(wikitext) {
   return regex.exec(wikitext)[1]
 }
 
+function saveToFile(contents, filename) {
+  fs.writeFile(filename, contents, (err) => {
+    if(err) throw err;
+    console.log("File written to", filename);
+  });
+}
+
 // main
 getPage("Tools_we_have", (body, err) => {
   if (err) throw err;
-  console.log(body);
+  saveToFile(JSON.stringify(body), "all_tools.wikitext");
 });
 
