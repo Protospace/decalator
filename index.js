@@ -50,7 +50,7 @@ function extractRedirect(wikitext) {
 }
 
 // main
-getPage("6", (body, err) => {
+getPage("Tools_we_have", (body, err) => {
   if (err) throw err;
   console.log(body);
 });
