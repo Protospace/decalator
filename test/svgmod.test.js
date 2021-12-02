@@ -27,12 +27,12 @@ describe('svgmod', ctx => {
       assert.equal(result.type, "svg");
     })
   })
+  let wikijump2x1 = svgmod.templates.wikijump2x1;
 
+  // TODO: should be snapshot testing all of the image-based test cases here
   describe('saveAsPng', () => {
     // arrange
-    let wikijump2x1 = svgmod.templates.wikijump2x1;
     let template = svgmod.openSVG(wikijump2x1.path);
-    let input = svgmod.getElement(template, wikijump2x1.id);
 
     it('saves as png without error', () => {
       // act
@@ -43,16 +43,27 @@ describe('svgmod', ctx => {
 
   describe('replaceText', () => {
     // arrange
-    let wikijump2x1 = svgmod.templates.wikijump2x1;
     let template = svgmod.openSVG(wikijump2x1.path);
     let input = svgmod.getElement(template, wikijump2x1.id);
 
     // act
-    actualNode = svgmod.replaceText(input, "9999");
+    svgmod.replaceText(input, "9999");
 
     it('should modify internal text of one node', () => {
       return svgmod.saveAsPng(template, path.join(test_output_directory,"svgmod.replaceText.test"));
       // verify ID has changed to 9999
+    });
+  });
+
+  describe('replaceQrCode', () => {
+    // arrange
+    let template = svgmod.openSVG(wikijump2x1.path);
+    let input = svgmod.getElement(template, wikijump2x1.qrcode);
+
+    it('should modify qr code with new text', () => {
+      // act
+    return svgmod.replaceQRCode(input, 'http://www.google.com').then(() => svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceQrCode.test')));
+      // verify QR code content has changed to http://www.google.com
     });
   });
 });
