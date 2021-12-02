@@ -4,15 +4,18 @@
   "description": "A tool for creating customized labels from templates",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
   "author": "brockman.ks@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "@svgdotjs/svg.js": "^3.1.1",
     "libxmljs2": "^0.29.0",
     "qrcode": "^1.5.0",
     "sharp": "^0.29.3",
-    "svgdom": "^0.1.10",
-    "@svgdotjs/svg.js": "^3.1.1"
+    "svgdom": "^0.1.10"
+  },
+  "devDependencies": {
+    "mocha": "^9.1.3"
   }
 }
