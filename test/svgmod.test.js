@@ -10,6 +10,11 @@ const svgmod = require('svgmod');
 
 print = console.log;
 
+// put all test-generated images into a single directory
+// create that directory if it doesnt exist...
+test_output_directory = "./output"
+if (!fs.existsSync(test_output_directory)) fs.mkdirSync(test_output_directory);
+
 describe('svgmod', ctx => {
   describe('openSVG', () => {
     result = svgmod.openSVG(svgmod.templates.wikijump2x1.path);
@@ -23,16 +28,31 @@ describe('svgmod', ctx => {
     })
   })
 
-  describe('replaceText', () => {
-    wikijump2x1 = svgmod.templates.wikijump2x1;
+  describe('saveAsPng', () => {
     // arrange
-    template = svgmod.openSVG(wikijump2x1.path);
-    input = svgmod.getElement(template, wikijump2x1.id);
+    let wikijump2x1 = svgmod.templates.wikijump2x1;
+    let template = svgmod.openSVG(wikijump2x1.path);
+    let input = svgmod.getElement(template, wikijump2x1.id);
+
+    it('saves as png without error', () => {
+      // act
+      return svgmod.saveAsPng(template, path.join(test_output_directory,"svgmod.saveAsPng.test"));
+      // verify the template has been saved faithfully as a png
+    });
+  });
+
+  describe('replaceText', () => {
+    // arrange
+    let wikijump2x1 = svgmod.templates.wikijump2x1;
+    let template = svgmod.openSVG(wikijump2x1.path);
+    let input = svgmod.getElement(template, wikijump2x1.id);
 
     // act
     actualNode = svgmod.replaceText(input, "9999");
+
     it('should modify internal text of one node', () => {
-      return svgmod.saveAsPng(template, "svgmod.replaceText.test");
+      return svgmod.saveAsPng(template, path.join(test_output_directory,"svgmod.replaceText.test"));
+      // verify ID has changed to 9999
     });
   });
 });

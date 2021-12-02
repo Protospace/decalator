@@ -3,10 +3,7 @@ const sharp = require('sharp');
 
 // set up svgdom: https://www.npmjs.com/package/svgdom#get-started-with-svgjs-v3x
 const { createSVGWindow } = require('svgdom')
-const window = createSVGWindow()
-const document = window.document
 const { SVG, registerWindow } = require('@svgdotjs/svg.js')
-registerWindow(window, document)
 
 const templates = {
   wikijump2x1: {
@@ -34,6 +31,9 @@ function replaceNode(node, newNode) {
 }
 
 function openSVG(path) {
+  let window = createSVGWindow()
+  let document = window.document
+  registerWindow(window, document)
   let draw = SVG();
   return draw.svg(fs.readFileSync(path));
 }
