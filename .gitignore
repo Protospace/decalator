@@ -1,0 +1,4 @@
+# don't include generated image files in source control
+# this might change if we implement snapshot testing
+*.test.png
+*.test.svg

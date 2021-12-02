@@ -117,6 +117,6 @@ QRCode.toString('http://www.hello.com', {type: 'svg'}, (err, string) => {
       console.log(info);
     })
     .catch(err => {
-      console.log(err);
+      throw err;
     });
 });
