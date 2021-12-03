@@ -15,6 +15,7 @@ const templates = {
     url: '#toolUrl',
     qrcode: '#toolQr',
     name: '#toolName',
+    nameBox: '#toolNameBox',
   }
 }
 
@@ -26,8 +27,36 @@ function replaceText(node, text) {
   return node;
 }
 
-function replaceBoxedText(node, text) {
+function replaceBoxedText(boxNode, textNode, newText) {
+  // https://stackoverflow.com/questions/15430189/pure-svg-way-to-fit-text-to-a-box
+  // HACK: this assumes at least ONE line in the template uses the maximum width of the line
+  var line_width = 0;
+  var line_height = 0;
+  textNode.children().forEach(child => { 
+    bbox = child.bbox()
+    child_width = bbox.width;
+    if (child_width > line_width) line_width = child_width;
+    child_height = bbox.height
+    if (child_height > line_height) line_height = child_height;
+  });
+  // generate scale factor because line.bbox seems to produce wildly different numbers than boxNode.bbox
+  scale_factor = boxNode.width() / line_width;
+  max_number_of_lines = Math.floor(boxNode.height() / line_height / scale_factor);
 
+  print(line_height)
+  // start generating text...
+  print(textNode.svg());
+  textNode.children().forEach(child => child.remove());
+  textNode.tspan('Lorem ipsum dolor sit amet ');
+  // textNode.tspan('Lorem ipsum dolor sit amet ').newLine();
+  // textNode.tspan('consectetur').fill('#f06');
+  // textNode.tspan('.');
+  print(textNode.svg());
+
+  var wat = [18.702212, 26.639712, 34.577212];
+  for (x=1; x<wat.length; x++) {
+    print(wat[x] - wat[x-1]);
+  }
 }
 
 async function replaceQRCode(node, qrCodeText) {

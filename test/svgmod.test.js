@@ -15,19 +15,15 @@ print = console.log;
 test_output_directory = "./output"
 if (!fs.existsSync(test_output_directory)) fs.mkdirSync(test_output_directory);
 
-describe('svgmod', ctx => {
-  describe('openSVG', () => {
-    result = svgmod.openSVG(svgmod.templates.wikijump2x1.path);
-
-    it('should not be empty', () => {
-      assert.ok(result);
-    })
-
-    it('should be an svg.js object', () => {
-      assert.equal(result.type, "svg");
-    })
-  })
+describe('svgmod', () => {
   let wikijump2x1 = svgmod.templates.wikijump2x1;
+
+  describe('openSVG', () => {
+    result = svgmod.openSVG(wikijump2x1.path);
+
+    it('should not be empty', () => assert.ok(result));
+    it('should be an svg.js object', () => assert.equal(result.type, "svg"));
+  })
 
   // TODO: should be snapshot testing all of the image-based test cases here
   describe('saveAsPng', () => {
@@ -62,8 +58,23 @@ describe('svgmod', ctx => {
 
     it('should modify qr code with new text', () => {
       // act
-    return svgmod.replaceQRCode(input, 'http://www.google.com').then(() => svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceQrCode.test')));
+      return svgmod.replaceQRCode(input, 'https://www.google.com').then(() => svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceQrCode.test')));
       // verify QR code content has changed to http://www.google.com
+    });
+  });
+
+  describe('replaceBoxedText', () => {
+    // arrange
+    let template = svgmod.openSVG(wikijump2x1.path);
+    let textNode = svgmod.getElement(template, wikijump2x1.name);
+    let boxNode= svgmod.getElement(template, wikijump2x1.nameBox);
+
+    it('should modify boxed text with new text and handle line breaks', () => {
+      // act
+      svgmod.replaceBoxedText(boxNode, textNode, 'I am some longer text that will surely not fit on one line')
+
+      return svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceBoxedText.test'));
+      // verify name field is 'I am some longer text that will surely not fit on one line' with line breaks
     });
   });
 });
