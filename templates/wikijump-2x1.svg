@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="4in"
    height="2in"
    viewBox="0 0 101.6 50.800001"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="wikijump-2x1.svg"
    inkscape:export-filename="/home/kent/Documents/cad/protospace-toolwiki-qr-codes/labels/26.png"
    inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300">
+   inkscape:export-ydpi="300"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
+    <rect
+       x="39.853238"
+       y="12.981658"
+       width="58.7248"
+       height="33.13926"
+       id="rect87" />
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
        inkscape:vp_x="0 : -97.700007 : 1"
@@ -78,16 +84,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.3628156"
-     inkscape:cx="195.41288"
-     inkscape:cy="125.9025"
+     inkscape:cx="201.45457"
+     inkscape:cy="106.65242"
      inkscape:document-units="in"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="948"
-     inkscape:window-height="1000"
-     inkscape:window-x="964"
-     inkscape:window-y="35"
+     inkscape:window-width="1257"
+     inkscape:window-height="1379"
+     inkscape:window-x="1286"
+     inkscape:window-y="44"
      inkscape:window-maximized="0"
      units="in"
      inkscape:pagecheckerboard="true"
@@ -298,28 +304,6 @@
          x="97.843216"
          y="60.924801"
          style="font-weight:bold;font-size:6.35586px;stroke-width:0.409802" /></text>
-    <rect
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.54761;stroke-miterlimit:4;stroke-dasharray:1.64282, 1.64282;stroke-dashoffset:0;stroke-opacity:1"
-       id="toolNameBox"
-       width="58.7248"
-       height="33.578392"
-       x="39.853237"
-       y="12.981658"
-       ry="0" />
-    <text
-       xml:space="preserve"
-       style="font-size:6.35px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';white-space:pre;shape-inside:url(#toolNameBox);stroke-width:0.409802;"
-       id="toolName"
-       transform="translate(0.11739502,-1.1192849)"><tspan
-         x="39.853516"
-         y="18.702212"><tspan
-           style="shape-inside:url(#toolNameBox)">Power supply, bench </tspan></tspan><tspan
-         x="39.853516"
-         y="26.639712"><tspan
-           style="shape-inside:url(#toolNameBox)">(GQ Electronics GQ-</tspan></tspan><tspan
-         x="39.853516"
-         y="34.577212"><tspan
-           style="shape-inside:url(#toolNameBox)">A305D)</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.10065px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.127517"
@@ -350,5 +334,18 @@
            id="path1314" />
       </g>
     </g>
+    <text
+       xml:space="preserve"
+       id="toolName"
+       style="line-height:1.25;font-family:'Liberation Sans';font-size:6.35000006px;-inkscape-font-specification:'Liberation Sans';white-space:pre;shape-inside:url(#rect87)"><tspan
+         x="39.853516"
+         y="18.702212"
+         id="tspan455">Power supply, bench </tspan><tspan
+         x="39.853516"
+         y="26.639712"
+         id="tspan457">(GQ Electronics GQ-</tspan><tspan
+         x="39.853516"
+         y="34.577212"
+         id="tspan459">A305D)</tspan></text>
   </g>
 </svg>
