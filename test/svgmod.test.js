@@ -66,12 +66,10 @@ describe('svgmod', () => {
   describe('replaceBoxedText', () => {
     // arrange
     let template = svgmod.openSVG(wikijump2x1.path);
-    let textNode = svgmod.getElement(template, wikijump2x1.name);
-    let boxNode= svgmod.getElement(template, wikijump2x1.nameBox);
 
     it('should modify boxed text with new text and handle line breaks', () => {
       // act
-      svgmod.replaceBoxedText(boxNode, textNode, 'I am some longer text that will surely not fit on one line')
+      svgmod.replaceBoxedText(template, wikijump2x1.name, 'I am some longer text that will surely not fit on one line')
 
       return svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceBoxedText.test'));
       // verify name field is 'I am some longer text that will surely not fit on one line' with line breaks

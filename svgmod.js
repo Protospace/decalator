@@ -27,36 +27,58 @@ function replaceText(node, text) {
   return node;
 }
 
-function replaceBoxedText(boxNode, textNode, newText) {
-  // https://stackoverflow.com/questions/15430189/pure-svg-way-to-fit-text-to-a-box
-  // HACK: this assumes at least ONE line in the template uses the maximum width of the line
-  var line_width = 0;
-  var line_height = 0;
-  textNode.children().forEach(child => { 
-    bbox = child.bbox()
-    child_width = bbox.width;
-    if (child_width > line_width) line_width = child_width;
-    child_height = bbox.height
-    if (child_height > line_height) line_height = child_height;
-  });
-  // generate scale factor because line.bbox seems to produce wildly different numbers than boxNode.bbox
-  scale_factor = boxNode.width() / line_width;
-  max_number_of_lines = Math.floor(boxNode.height() / line_height / scale_factor);
+function replaceBoxedText(template, textSelector, newText) {
+  // get the text node
+  let textNode = getElement(template, textSelector);
 
-  print(line_height)
-  // start generating text...
-  print(textNode.svg());
-  textNode.children().forEach(child => child.remove());
-  textNode.tspan('Lorem ipsum dolor sit amet ');
-  // textNode.tspan('Lorem ipsum dolor sit amet ').newLine();
-  // textNode.tspan('consectetur').fill('#f06');
-  // textNode.tspan('.');
-  print(textNode.svg());
+  // inspect the style to get the bounding rectangle and grab that element as well
+  shapeInsideRegEx = new RegExp(/shape-inside:url\((\#.*)\)/);
+  // TODO: can we use a named group or something instead of blindly indexing?
+  // https://www.bennadel.com/blog/3508-playing-with-regexp-named-capture-groups-in-node-10.htm
+  inside_match = shapeInsideRegEx.exec(textNode.attr().style);
+  boxNode = getElement(template, inside_match[1]);
 
-  var wat = [18.702212, 26.639712, 34.577212];
-  for (x=1; x<wat.length; x++) {
-    print(wat[x] - wat[x-1]);
+  // avg_line_height precalculate from textNode.children.y()
+  avg_line_height = function(){
+    lines = textNode.children();
+    deltas = []
+    for(x=lines.length - 1; x>0; x--) {
+      deltas.push(lines[x].attr().y - lines[x - 1].attr().y);
+    }
+    // average together the line heights
+    // ASSUMPTION: all heights are approximately the same give-or-take floating point math
+    return (deltas).reduce((a,b) => a + b, 0) / deltas.length
+  }()
+
+  // max_line_width = get max line width - ideally from boxNode width but I dont think we can get that...
+  max_line_width = Math.max(...textNode.children().map(child => child.bbox().width));
+
+  max_number_of_lines = Math.floor(boxNode.height() / avg_line_height);
+  current_line_number = 1;
+
+  // make a 'template' for each child in textnode
+  first_line = textNode.children()[0].clone();
+  createTSpan = function() {
+    x_start = first_line.attr().x;
+    y_start = first_line.attr().y + (current_line_number - 1) * avg_line_height;
+
+    // new tspan.x should be same. tspan.y = line_number * line_height
+    tspanTemplate = `<tspan x="${x_start}" y="${y_start}">Text Here</tspan>`;
+    current_line_number++;
+    return tspanTemplate;
   }
+
+  // remove content from template
+  textNode.children().forEach(child => child.remove());
+
+  // generate our own content
+  textNode.svg(createTSpan());
+  textNode.svg(createTSpan());
+  textNode.svg(createTSpan());
+
+  // yield from newText building string content...
+  // measure width with bbox
+  // once exceeds maxwidth of original line, reclaim last word and start a new tspan...
 }
 
 async function replaceQRCode(node, qrCodeText) {
@@ -85,6 +107,10 @@ function saveAsPng(svg, fileName) {
   return sharp(Buffer.from(svg.svg()))
     .png()
     .toFile(fileName + '.png');
+}
+
+function saveAsSvg(svg, fileName) {
+  fs.writeFileSync(fileName + '.svg', svg.svg());
 }
 
 module.exports = {

@@ -61,7 +61,7 @@ function extractRedirect(wikitext) {
   // TODO: what do in case of no match?
 
   // get the name of the page we are redirecting to
-  // TODO: this is horrific, can we use a named group or something instead of blindly indexing?
+  // TODO: can we use a named group or something instead of blindly indexing?
   // https://www.bennadel.com/blog/3508-playing-with-regexp-named-capture-groups-in-node-10.htm
   return regex.exec(wikitext)[1]
 }
