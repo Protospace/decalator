@@ -1,8 +1,5 @@
 const https = require('https');
 const fs = require('fs');
-const sharp = require('sharp');
-const libxmljs = require('libxmljs2');
-const QRCode = require('qrcode');
 
 print = console.log
 
@@ -74,49 +71,7 @@ function saveToFile(contents, filename) {
 }
 
 // main
-// getPage('6', (body, err) => {
-  // if (err) throw err;
-  // console.log(body);
-// });
-
-// open SVG as XML document
-svgdata = fs.readFileSync('./templates/wikijump-2x1.svg');
-svgXml = libxmljs.parseXml(svgdata);
-
-template_id = '26'
-
-// update the svg template
-// acquire the nodes to update using XPath selectors
-// update toolId node
-toolIdNode = svgXml.get('//*[@id="toolId"]');
-toolIdNode.text('6');
-
-// update toolUrl node
-toolUrlNode = svgXml.get('//*[@id="toolUrl"]');
-toolUrlNode.text(toolUrlNode.text().replace('26', '6'));
-
-// update toolName node
-// toolNameNode = svgXml.get('//*[@id='toolName']');
-// toolNameNode.text('GET ME FROM THE WIKI BITCH');
-
-// replace toolQr with generated QR code
-toolQrNode = svgXml.get('//*[@id="toolQr"]');
-
-// https://github.com/soldair/node-qrcode#qr-code-options
-QRCode.toString('http://www.hello.com', {type: 'svg'}, (err, string) => {
-  if(err) throw err;
-  // create new QR code, grab only internal elements
-  newQr = libxmljs.parseXml(string).childNodes();
-  newQr.forEach(x => toolQrNode.addChild(x));
-
-  // convert SVG to PNG
-  sharp(Buffer.from(svgXml.toString()))
-    .png()
-    .toFile('new-file.kbscratch.png')
-    .then(info => {
-      console.log(info);
-    })
-    .catch(err => {
-      throw err;
-    });
+getPage('6', (body, err) => {
+  if (err) throw err;
+  console.log(body);
 });

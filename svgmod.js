@@ -32,8 +32,8 @@ function replaceBoxedText(template, textSelector, newText) {
 
   // setting:
   // textNode.node.textContent = newText;
-  // return
-  // makes a passable SVG in inkscape, but not in the browser, not a usable PNG either
+  // makes a passable SVG in inkscape, but not in the browser nor a usable PNG
+  // just documenting this for posterity
 
   // inspect the style to get the bounding rectangle and grab that element as well
   shapeInsideRegEx = new RegExp(/shape-inside:url\((\#.*)\)/);
