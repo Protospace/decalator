@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
 
 const svgmod = require('./svgmod');
 const wikimediaApi = require('./wikimediaApi');
@@ -9,12 +10,7 @@ print = console.log;
 // TODO: proper logging
 // TODO: add function docs
 
-// main
-[
-  '120',
-  '144',
-  '15'
-].forEach(page => {
+function generateLabel(page) {
   wikimediaApi.getPage(page, (body, err) => {
     if (err) throw err;
     params = wikimediaApi.extractNameAndId(body.title);
@@ -41,4 +37,20 @@ print = console.log;
     svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 1.5);
     svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 2);
   });
+}
+
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  print(req.query);
+  // need:
+  // template
+  // id
+  // size
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  print(`Listening at http://localhost:${port}`)
 })

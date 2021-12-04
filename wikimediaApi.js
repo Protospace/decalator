@@ -50,8 +50,7 @@ function getPage(name, callback) {
       // TODO: error handling if property doesn't exist
       wikitext = resp.wikitext['*'];
 
-      // check if this page has a redirect
-      // protospace wiki pages for tools often do
+      // protospace wiki pages for tools often have redirects
       if (isRedirect(wikitext)) {
         redirect_page = extractRedirect(wikitext)
         console.log('CALL REDIRECT', redirect_page);

@@ -140,6 +140,7 @@ function getElement(svg, selector) {
 function saveAsPng(svg, fileName, size=1, dpi=300) {
   // to set a specific size, use the formula:
   // dpi * size (in inches) = height (in pixels)
+  // TODO: dont allow sizes > 4" height because that's a big job
   height = size * dpi;
   return sharp(Buffer.from(svg.svg()), {density: dpi})
     .resize(height)
