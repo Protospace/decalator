@@ -15,7 +15,6 @@ const templates = {
     url: '#toolUrl',
     qrcode: '#toolQr',
     name: '#toolName',
-    nameBox: '#toolNameBox',
   }
 }
 
@@ -30,6 +29,11 @@ function replaceText(node, text) {
 function replaceBoxedText(template, textSelector, newText) {
   // get the text node
   let textNode = getElement(template, textSelector);
+
+  // setting:
+  // textNode.node.textContent = newText;
+  // return
+  // makes a passable SVG in inkscape, but not in the browser, not a usable PNG either
 
   // inspect the style to get the bounding rectangle and grab that element as well
   shapeInsideRegEx = new RegExp(/shape-inside:url\((\#.*)\)/);
@@ -106,7 +110,7 @@ function replaceBoxedText(template, textSelector, newText) {
     }
     current_index = stop_index;
   }
-  if (current_index < words.length) print("WARNING: CONTENT DOESNT FIT!");
+  if (current_index < words.length) throw new Error('Content does not fit on template: ' + words.slice(current_index, words.length - 1).join(' '));
 }
 
 async function replaceQRCode(node, qrCodeText) {

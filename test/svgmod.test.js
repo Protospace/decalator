@@ -63,7 +63,7 @@ describe('svgmod', () => {
     });
   });
 
-  describe('replaceBoxedText', () => {
+  describe('replaceBoxedText that fits', () => {
     // arrange
     let template = svgmod.openSVG(wikijump2x1.path);
 
@@ -71,8 +71,22 @@ describe('svgmod', () => {
       // act
       svgmod.replaceBoxedText(template, wikijump2x1.name, 'I am some longer text that will surely not fit on one line')
 
-      return svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceBoxedText.test'));
+      return svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceBoxedTextThatFits.test'));
       // verify name field is 'I am some longer text that will surely not fit on one line' with line breaks
+    });
+  });
+
+  describe('replaceBoxedText that doesnt fit', () => {
+    // arrange
+    let template = svgmod.openSVG(wikijump2x1.path);
+
+    it('should modify boxed text with new text and handle line breaks', () => {
+      // assert
+      assert.throws(() => {
+        // act
+        svgmod.replaceBoxedText(template, wikijump2x1.name, 'I am some longer text that will surely not fit on the entire label because as I stated previously this line is obnoxiously long')
+      });
+      svgmod.saveAsPng(template, path.join(test_output_directory,'svgmod.replaceBoxedTextThatDoesntFit.test'));
     });
   });
 });
