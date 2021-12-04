@@ -137,11 +137,14 @@ function getElement(svg, selector) {
   return svg.findOne(selector);
 }
 
-function saveAsPng(svg, fileName) {
-  // TODO: how to output png at a specific size?
-  return sharp(Buffer.from(svg.svg()))
+function saveAsPng(svg, fileName, size=1, dpi=300) {
+  // to set a specific size, use the formula:
+  // dpi * size (in inches) = height (in pixels)
+  height = size * dpi;
+  return sharp(Buffer.from(svg.svg()), {density: dpi})
+    .resize(height)
     .png()
-    .toFile(fileName + '.png');
+    .toFile(`${fileName}.${size}.png`);
 }
 
 function saveAsSvg(svg, fileName) {

@@ -12,8 +12,8 @@ print = console.log;
 // main
 [
   '120',
-  '144',
-  '15'
+  // '144',
+  // '15'
 ].forEach(page => {
   wikimediaApi.getPage(page, (body, err) => {
     if (err) throw err;
@@ -37,6 +37,8 @@ print = console.log;
     svgmod.replaceText(svgmod.getElement(template, wikijump2x1.id), params.id);
 
     // save to file
-    svgmod.saveAsPng(template, path.join(`./output/${params.id}`));
+    svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 1);
+    svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 1.5);
+    svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 2);
   });
 })

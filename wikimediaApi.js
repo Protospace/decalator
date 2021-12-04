@@ -29,6 +29,7 @@ function extractRedirect(wikitext) {
 function getPage(name, callback) {
   const API = WIKI_ENDPOINT + 'api.php';
   // TODO: string builder? what is risk of injection attack?
+  // DO this: https://www.valentinog.com/blog/url/
   let request = API + '?action=parse&prop=wikitext&format=json&page=' + name
   console.log('requesting', request);
   https.get(request, res => {
