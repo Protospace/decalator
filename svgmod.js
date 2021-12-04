@@ -51,20 +51,20 @@ function replaceBoxedText(template, textSelector, newText) {
   }()
 
   // max_line_width = get max line width - ideally from boxNode width but I dont think we can get that...
+  // ASSUMPTION here that a textNode line in the template occupies that maximum width
   max_line_width = Math.max(...textNode.children().map(child => child.bbox().width));
-
-  max_number_of_lines = Math.floor(boxNode.height() / avg_line_height);
-  current_line_number = 1;
+  max_number_of_lines = Math.floor(boxNode.height() / avg_line_height) - 1;
+  current_line_number = -1;
 
   // make a 'template' for each child in textnode
   first_line = textNode.children()[0].clone();
   createTSpan = function() {
+    current_line_number++;
     x_start = first_line.attr().x;
-    y_start = first_line.attr().y + (current_line_number - 1) * avg_line_height;
+    y_start = first_line.attr().y + current_line_number * avg_line_height;
 
     // new tspan.x should be same. tspan.y = line_number * line_height
     tspanTemplate = `<tspan x="${x_start}" y="${y_start}">Text Here</tspan>`;
-    current_line_number++;
     return tspanTemplate;
   }
 
@@ -72,10 +72,40 @@ function replaceBoxedText(template, textSelector, newText) {
   textNode.children().forEach(child => child.remove());
 
   // generate our own content
-  textNode.svg(createTSpan());
-  textNode.svg(createTSpan());
-  textNode.svg(createTSpan());
 
+  // everything here on out is to generate line breaks in our text
+  // apparently SVG is a baby format that cannot do this for me automatically...
+  words = newText.split(' ');
+  total_words = words.length;
+  current_index = 0;
+  
+
+  while (current_line_number < max_number_of_lines) {
+    textNode.svg(createTSpan());
+    line = textNode.children()[current_line_number];
+    print('current_line_number:', current_line_number);
+    current_line_width = 0.0;
+    num_words_for_line = 1;
+    while (current_line_width < max_line_width) {
+      num_words_for_line++;
+      stop_index = current_index + num_words_for_line;
+      line.node.textContent = words.slice(current_index, stop_index).join(' ');
+      print('line.node.textContent', line.node.textContent)
+      current_line_width = line.bbox().width
+      print('current_line_width', current_line_width);
+      print(stop_index, total_words - 1, total_words);
+      if (stop_index >= total_words - 1) break;
+    }
+    // presumably we have exceeded max_line_width, if so back a word off
+    if (current_line_width > max_line_width) {
+      stop_index--;
+      line.node.textContent = words.slice(current_index, stop_index).join(' ');
+    }
+    current_index = stop_index;
+  }
+  if (current_index < words.length) print("WARNING: CONTENT DOESNT FIT!");
+
+  saveAsSvg(template, 'output/replaceBoxedText.test');
   // yield from newText building string content...
   // measure width with bbox
   // once exceeds maxwidth of original line, reclaim last word and start a new tspan...
