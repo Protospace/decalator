@@ -12,8 +12,8 @@ print = console.log;
 // main
 [
   '120',
-  // '144',
-  // '15'
+  '144',
+  '15'
 ].forEach(page => {
   wikimediaApi.getPage(page, (body, err) => {
     if (err) throw err;
