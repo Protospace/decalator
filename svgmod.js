@@ -71,32 +71,35 @@ function replaceBoxedText(template, textSelector, newText) {
   // remove content from template
   textNode.children().forEach(child => child.remove());
 
-  // generate our own content
-
+  // time to generate our own content
   // everything here on out is to generate line breaks in our text
   // apparently SVG is a baby format that cannot do this for me automatically...
   words = newText.split(' ');
   total_words = words.length;
   current_index = 0;
   
-
+  // we are not going to attempt to write more lines than we have size for
   while (current_line_number < max_number_of_lines) {
     textNode.svg(createTSpan());
     line = textNode.children()[current_line_number];
     print('current_line_number:', current_line_number);
     current_line_width = 0.0;
     num_words_for_line = 1;
+    // progressively add words to line.node.textContent and check the width
+    // stop writing if the line gets too long
     while (current_line_width < max_line_width) {
       num_words_for_line++;
       stop_index = current_index + num_words_for_line;
       line.node.textContent = words.slice(current_index, stop_index).join(' ');
-      print('line.node.textContent', line.node.textContent)
-      current_line_width = line.bbox().width
+      print('line.node.textContent', line.node.textContent);
+      current_line_width = line.bbox().width;
       print('current_line_width', current_line_width);
       print(stop_index, total_words - 1, total_words);
+      // stop writing if we run out of words to write
       if (stop_index >= total_words - 1) break;
     }
-    // presumably we have exceeded max_line_width, if so back a word off
+    // presumably we have exceeded max_line_width, if so back a word off and reassign line.node.textContent
+    // but ONLY if we exceed the max_line_width as there is cases we may not (e.g. the last written line)
     if (current_line_width > max_line_width) {
       stop_index--;
       line.node.textContent = words.slice(current_index, stop_index).join(' ');
@@ -104,11 +107,6 @@ function replaceBoxedText(template, textSelector, newText) {
     current_index = stop_index;
   }
   if (current_index < words.length) print("WARNING: CONTENT DOESNT FIT!");
-
-  saveAsSvg(template, 'output/replaceBoxedText.test');
-  // yield from newText building string content...
-  // measure width with bbox
-  // once exceeds maxwidth of original line, reclaim last word and start a new tspan...
 }
 
 async function replaceQRCode(node, qrCodeText) {
