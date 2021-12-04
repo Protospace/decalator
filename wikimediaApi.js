@@ -1,5 +1,5 @@
 const https = require('https');
-WIKI_ENDPOINT = 'https://wiki.protospace.ca/'
+const WIKI_ENDPOINT = 'https://wiki.protospace.ca/'
 
 function extractNameAndId(title) {
   result = (new RegExp(/(.*)\ ID:(\d+)/)).exec(title);

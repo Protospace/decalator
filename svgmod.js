@@ -56,7 +56,10 @@ function replaceBoxedText(template, textSelector, newText) {
 
   // max_line_width = get max line width - ideally from boxNode width but I dont think we can get that...
   // ASSUMPTION here that a textNode line in the template occupies that maximum width
-  max_line_width = Math.max(...textNode.children().map(child => child.bbox().width));
+  // why 0.95? cause tool 144 doesn't construct properly and I'm not sure why
+  // This whole calculation is a bit suspect as textNode child bbox width exceeds boxNode bbox width which is impossible
+  // so something is happening here I do not understand
+  max_line_width = Math.max(...textNode.children().map(child => child.bbox().width)) * 0.95;
   max_number_of_lines = Math.floor(boxNode.height() / avg_line_height) - 1;
   current_line_number = -1;
 
