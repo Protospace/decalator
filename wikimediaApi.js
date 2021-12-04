@@ -69,4 +69,5 @@ module.exports = {
   extractNameAndId,
   isRedirect,
   extractRedirect,
+  WIKI_ENDPOINT
 }
