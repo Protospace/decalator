@@ -28,8 +28,5 @@ npm test
 
 ## To Do
 
-- [Express](https://www.npmjs.com/package/express) yourself
-  - how to test URL handling?
 - Dockerize
-- clean up todos
 - host on DO

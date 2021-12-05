@@ -8,9 +8,12 @@ const wikimediaApi = require('./wikimediaApi');
 const log = require('./log')
 
 function generateLabel(page, size=1.5, callback=null) {
-  // TODO: error if id doesnt exist
   wikimediaApi.getPage(page, (body, err) => {
-    if (err) throw err;
+    if (!body) {
+      if (callback) callback(null, err);
+      else throw err;
+      return;
+    }
     params = wikimediaApi.extractNameAndId(body.title);
     wikijump2x1 = svgmod.templates.wikijump2x1;
     template = svgmod.openSVG(wikijump2x1.path);
@@ -23,7 +26,7 @@ function generateLabel(page, size=1.5, callback=null) {
       svgmod.replaceBoxedText(template, wikijump2x1.name, params.name);
     } catch (e) {
       if (e.message.includes('Content does not fit')) {
-        log.warn(`WARN: ID:${params.id} '${params.name}' doesn't fit on the label. Review this label to determine if it is appropriate. Continuing...`);
+        log.warn(`ID:${params.id} '${params.name}' doesn't fit on the label. Review this label to determine if it is appropriate. Continuing...`);
       } else {
         throw e;
       }
@@ -31,7 +34,7 @@ function generateLabel(page, size=1.5, callback=null) {
     svgmod.replaceText(svgmod.getElement(template, wikijump2x1.id), params.id);
 
     if (callback) {
-      callback(template);
+      callback(template, null);
     } else {
       // save to file
       svgmod.saveAsPng(template, path.join(`./output/${params.id}`), size);
@@ -56,7 +59,21 @@ app.get('/', (req, res) => {
   }
   // TODO: add 1x2 template and provide that via query param
   size = query.size || 1.5
-  generateLabel(query.id, size, (svg) => {
+  log.info(`call ${JSON.stringify(query)}`)
+  generateLabel(query.id, size, (svg, err) => {
+    if (err) {
+      if (err.includes('The page you specified doesn\'t exist')) {
+        res
+          .status(400)
+          .end(`Page with ID ${query.id} doesn't exist. Please select a different page.`);
+        return;
+      } else {
+        res
+          .status(500)
+          .end(`Failed to get data from wiki with error: ${err}`);
+        return;
+      }
+    }
     dpi = 300;
     height = size * dpi;
     let img = sharp(Buffer.from(svg.svg()), {density: dpi})
