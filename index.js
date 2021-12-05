@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
+const sharp = require('sharp');
 
 const svgmod = require('./svgmod');
 const wikimediaApi = require('./wikimediaApi');
@@ -10,7 +11,8 @@ print = console.log;
 // TODO: proper logging
 // TODO: add function docs
 
-function generateLabel(page) {
+function generateLabel(page, size=1.5, callback=null) {
+  // TODO: error if id doesnt exist
   wikimediaApi.getPage(page, (body, err) => {
     if (err) throw err;
     params = wikimediaApi.extractNameAndId(body.title);
@@ -32,10 +34,12 @@ function generateLabel(page) {
     }
     svgmod.replaceText(svgmod.getElement(template, wikijump2x1.id), params.id);
 
-    // save to file
-    svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 1);
-    svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 1.5);
-    svgmod.saveAsPng(template, path.join(`./output/${params.id}`), 2);
+    if (callback) {
+      callback(template);
+    } else {
+      // save to file
+      svgmod.saveAsPng(template, path.join(`./output/${params.id}`), size);
+    }
   });
 }
 
@@ -45,13 +49,34 @@ const port = 3000;
 app.get('/', (req, res) => {
   // need:
   // template
-  // id
-  // size
-  res.status(200).send('Hello World!').end();
+  // validate
+  let errors = [];
+  query = req.query;
+  if (!('id' in query)) errors.push('"id" not supplied as query parameter');
+  if ('size' in query && isNaN(query.size)) errors.push('"size" must be a number');
+  if ('size' in query && query.size > 4) errors.push('"size" cannot be >4');
+  if ('size' in query && query.size < 1) errors.push('"size" much be >=1');
+  if (errors.length > 0) { 
+    res.status(400).send('Please fix the following errors:<br/><br/>' + errors.join('<br/>')).end(); 
+    return
+  }
+  size = query.size || 1.5
+  generateLabel(query.id, size, (svg) => {
+    dpi = 300;
+    height = size * dpi;
+    let img = sharp(Buffer.from(svg.svg()), {density: dpi})
+      .resize(height)
+      .png()
+      .toBuffer((err, data, info) => {
+        res.writeHead(200, {
+           'Content-Type': 'image/png',
+           'Content-Length': info.size
+        });
+        res.end(data);
+      });
+  });
 });
 
 app.listen(port, () => {
   print(`Listening at http://localhost:${port}`);
 });
-
-module.exports = app
