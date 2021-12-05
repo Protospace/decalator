@@ -1,4 +1,6 @@
 FROM node:16.13
+RUN apt update
+RUN apt install -y fonts-liberation fonts-liberation2
 WORKDIR /app
 COPY . .
 RUN npm install
