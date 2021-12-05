@@ -43,14 +43,15 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res) => {
-  print(req.query);
   // need:
   // template
   // id
   // size
-  res.send('Hello World!')
-})
+  res.status(200).send('Hello World!').end();
+});
 
 app.listen(port, () => {
-  print(`Listening at http://localhost:${port}`)
-})
+  print(`Listening at http://localhost:${port}`);
+});
+
+module.exports = app

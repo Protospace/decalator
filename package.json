@@ -4,7 +4,7 @@
   "description": "A tool for creating customized labels from templates",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha --exit",
     "start": "node index.js"
   },
   "author": "brockman.ks@gmail.com",
@@ -17,6 +17,8 @@
     "svgdom": "^0.1.10"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "mocha": "^9.1.3"
   }
 }
