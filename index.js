@@ -59,7 +59,7 @@ app.get('/', (req, res) => {
   }
   // TODO: add 1x2 template and provide that via query param
   size = query.size || 1.5
-  log.info(`call ${JSON.stringify(query)}`)
+  log.info(`call ${req.url}`)
   generateLabel(query.id, size, (svg, err) => {
     if (err) {
       if (err.includes('The page you specified doesn\'t exist')) {
