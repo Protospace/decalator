@@ -1,4 +1,5 @@
 const https = require('https');
+const log = require('./log');
 const WIKI_ENDPOINT = 'https://wiki.protospace.ca/'
 
 function extractNameAndId(title) {
@@ -31,7 +32,7 @@ function getPage(name, callback) {
   // TODO: string builder? what is risk of injection attack?
   // DO this: https://www.valentinog.com/blog/url/
   let request = API + '?action=parse&prop=wikitext&format=json&page=' + name
-  console.log('requesting', request);
+  log.info('requesting', request);
   https.get(request, res => {
     res.setEncoding('utf-8');
     let body = '';
@@ -53,7 +54,7 @@ function getPage(name, callback) {
       // protospace wiki pages for tools often have redirects
       if (isRedirect(wikitext)) {
         redirect_page = extractRedirect(wikitext)
-        console.log('CALL REDIRECT', redirect_page);
+        log.info('CALL REDIRECT', redirect_page);
         getPage(redirect_page, callback);
         return
       }

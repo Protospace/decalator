@@ -2,9 +2,9 @@ const fs = require('fs');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
 
-// set up svgdom: https://www.npmjs.com/package/svgdom#get-started-with-svgjs-v3x
 const { createSVGWindow } = require('svgdom')
 const { SVG, registerWindow } = require('@svgdotjs/svg.js')
+const log = require('./log');
 
 const templates = {
   wikijump2x1: {
@@ -89,7 +89,7 @@ function replaceBoxedText(template, textSelector, newText) {
   while (current_line_number < max_number_of_lines) {
     textNode.svg(createTSpan());
     line = textNode.children()[current_line_number];
-    print('current_line_number:', current_line_number);
+    log.debug('current_line_number:', current_line_number);
     current_line_width = 0.0;
     num_words_for_line = 1;
     // progressively add words to line.node.textContent and check the width
@@ -98,10 +98,10 @@ function replaceBoxedText(template, textSelector, newText) {
       num_words_for_line++;
       stop_index = current_index + num_words_for_line;
       line.node.textContent = words.slice(current_index, stop_index).join(' ');
-      print('line.node.textContent', line.node.textContent);
+      log.debug('line.node.textContent', line.node.textContent);
       current_line_width = line.bbox().width;
-      print('current_line_width', current_line_width);
-      print(stop_index, total_words - 1, total_words);
+      log.debug('current_line_width', current_line_width);
+      log.debug(stop_index, total_words - 1, total_words);
       // stop writing if we run out of words to write
       if (stop_index >= total_words - 1) break;
     }
@@ -126,6 +126,7 @@ async function replaceQRCode(node, qrCodeText) {
 }
 
 function openSVG(path) {
+  // set up svgdom: https://www.npmjs.com/package/svgdom#get-started-with-svgjs-v3x
   let window = createSVGWindow()
   let document = window.document
   registerWindow(window, document)
