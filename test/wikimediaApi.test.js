@@ -25,6 +25,13 @@ describe('wikimediaApi', () => {
           id: '15',
         }
       },
+      {
+        input: 'Garment graphic printer, direct inject (Brother GT-361) ID: 146',
+        expected: {
+          name: 'Garment graphic printer, direct inject (Brother GT-361)',
+          id: '146',
+        }
+      },
     ]
     tests.forEach(({input, expected}) => {
       it(`correctly parses ${input} `, function() {

@@ -3,7 +3,9 @@ const log = require('./log');
 const WIKI_ENDPOINT = 'https://wiki.protospace.ca/'
 
 function extractNameAndId(title) {
-  result = (new RegExp(/(.*)\ ID:(\d+)/)).exec(title);
+  log.debug(`title: ${title}`);
+  result = (new RegExp(/(.*)\ ID:\s*(\d+)/)).exec(title);
+  log.debug(`result: ${result}`);
   return {
     name: result[1],
     id: result[2]
@@ -65,6 +67,7 @@ function getPage(name, callback) {
         return
       }
 
+      log.debug(`resp: ${JSON.stringify(resp)}`);
       // otherwise, pass the response data back
       callback(resp, err);
     })
