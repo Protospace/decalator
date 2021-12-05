@@ -28,5 +28,7 @@ npm test
 
 ## To Do
 
-- Dockerize
-- host on DO
+- Add second template
+- layout for print
+- build a UI
+- parameterize coloring
