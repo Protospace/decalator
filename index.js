@@ -92,3 +92,7 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   log.info(`Listening at http://localhost:${port}`);
 });
+
+process.on('SIGINT', function() {
+    process.exit();
+});
