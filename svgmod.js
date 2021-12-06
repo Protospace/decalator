@@ -143,7 +143,7 @@ function saveAsPng(svg, fileName, size=1, dpi=300) {
   // dpi * size (in inches) = height (in pixels)
   height = size * dpi;
   return sharp(Buffer.from(svg.svg()), {density: dpi})
-    .resize(height)
+    .resize({height: height})
     .png()
     .toFile(`${fileName}.${size}.png`);
 }
